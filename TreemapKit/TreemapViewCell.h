@@ -2,21 +2,13 @@
 
 @protocol TreemapViewCellDelegate;
 
-@interface TreemapViewCell : UIControl {
-    UILabel *valueLabel;
-    UILabel *textLabel;
+@interface TreemapViewCell : UIControl
 
-    NSInteger index;
+@property (nonatomic, strong) UILabel *valueLabel;
+@property (nonatomic, strong) UILabel *textLabel;
+@property (nonatomic, assign) NSInteger index;
 
-    id <TreemapViewCellDelegate> delegate;
-}
-
-@property (nonatomic, retain) UILabel *valueLabel;
-@property (nonatomic, retain) UILabel *textLabel;
-
-@property NSInteger index;
-
-@property (nonatomic, retain) id <TreemapViewCellDelegate> delegate;
+@property (nonatomic, weak) id <TreemapViewCellDelegate> delegate;
 
 - (id)initWithFrame:(CGRect)frame;
 

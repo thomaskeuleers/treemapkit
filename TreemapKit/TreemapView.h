@@ -4,15 +4,12 @@
 @protocol TreemapViewDataSource;
 @protocol TreemapViewDelegate;
 
-@interface TreemapView : UIView <TreemapViewCellDelegate> {
-    id <TreemapViewDataSource> dataSource;
-    id <TreemapViewDelegate> delegate;
-
+@interface TreemapView : UIView <TreemapViewCellDelegate>{
     BOOL initialized;
 }
 
-@property (nonatomic, retain) IBOutlet id <TreemapViewDataSource> dataSource;
-@property (nonatomic, retain) IBOutlet id <TreemapViewDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <TreemapViewDataSource> dataSource;
+@property (nonatomic, weak) IBOutlet id <TreemapViewDelegate> delegate;
 
 - (void)reloadData;
 

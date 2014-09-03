@@ -108,10 +108,4 @@
 	fruits = nil;
 }
 
-- (void)dealloc {
-	[fruits release];
-
-	[super dealloc];
-}
-
 @end

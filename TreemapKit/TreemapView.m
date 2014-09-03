@@ -2,14 +2,11 @@
 
 @implementation TreemapView
 
-@synthesize dataSource;
-@synthesize delegate;
-
 - (void)calcNodePositions:(CGRect)rect nodes:(NSArray *)nodes width:(CGFloat)width height:(CGFloat)height depth:(NSInteger)depth withCreate:(BOOL)createNode {
     if (nodes.count <= 1) {
         NSInteger index = [[[nodes objectAtIndex:0] valueForKey:@"index"] integerValue];
         if (createNode || index >= self.subviews.count) {
-            TreemapViewCell *cell = [dataSource treemapView:self cellForIndex:index forRect:rect];
+            TreemapViewCell *cell = [self.dataSource treemapView:self cellForIndex:index forRect:rect];
             cell.index = index;
             cell.delegate = self;
             [self addSubview:cell];
@@ -17,8 +14,8 @@
         else {
             TreemapViewCell *cell = [self.subviews objectAtIndex:index];
             cell.frame = rect;
-            if ([delegate respondsToSelector:@selector(treemapView:updateCell:forIndex:forRect:)])
-                [delegate treemapView:self updateCell:cell forIndex:index forRect:rect];
+            if ([self.delegate respondsToSelector:@selector(treemapView:updateCell:forIndex:forRect:)])
+                [self.delegate treemapView:self updateCell:cell forIndex:index forRect:rect];
             [cell layoutSubviews];
         }
         return;
@@ -31,8 +28,8 @@
     CGFloat half = total / 2.0;
 
     NSInteger customSep = NSNotFound;
-    if ([dataSource respondsToSelector:@selector(treemapView:separationPositionForDepth:)])
-        customSep = [dataSource treemapView:self separationPositionForDepth:depth];
+    if ([self.dataSource respondsToSelector:@selector(treemapView:separationPositionForDepth:)])
+        customSep = [self.dataSource treemapView:self separationPositionForDepth:depth];
 
     NSInteger m;
     if (customSep != NSNotFound) {
@@ -75,8 +72,8 @@
     BOOL horizontal = (width > height);
 
     CGFloat sep = 0.0;
-    if ([dataSource respondsToSelector:@selector(treemapView:separatorWidthForDepth:)])
-        sep = [dataSource treemapView:self separatorWidthForDepth:depth];
+    if ([self.dataSource respondsToSelector:@selector(treemapView:separatorWidthForDepth:)])
+        sep = [self.dataSource treemapView:self separatorWidthForDepth:depth];
 
     if (horizontal) {
         aWidth = ceil((width - sep) * aRatio);
@@ -105,7 +102,7 @@
 }
 
 - (NSArray *)getData {
-    NSArray *values = [dataSource valuesForTreemapView:self];
+    NSArray *values = [self.dataSource valuesForTreemapView:self];
     NSMutableArray *nodes = [NSMutableArray arrayWithCapacity:values.count];
     for (NSInteger i = 0; i < values.count; i++) {
         NSNumber *value = [values objectAtIndex:i];
@@ -159,35 +156,35 @@
 
 - (void)treemapViewCell:(TreemapViewCell *)treemapViewCell
            touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (delegate && [delegate respondsToSelector:@selector(treemapView:touchesBegan:withEvent:)]) {
-        [delegate treemapView:self touchesBegan:touches withEvent:event];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(treemapView:touchesBegan:withEvent:)]) {
+        [self.delegate treemapView:self touchesBegan:touches withEvent:event];
     }
 }
 
 - (void)treemapViewCell:(TreemapViewCell *)treemapViewCell
        touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (delegate && [delegate respondsToSelector:@selector(treemapView:touchesCancelled:withEvent:)]) {
-        [delegate treemapView:self touchesCancelled:touches withEvent:event];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(treemapView:touchesCancelled:withEvent:)]) {
+        [self.delegate treemapView:self touchesCancelled:touches withEvent:event];
     }
 }
 
 - (void)treemapViewCell:(TreemapViewCell *)treemapViewCell
            touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (delegate && [delegate respondsToSelector:@selector(treemapView:touchesEnded:withEvent:)]) {
-        [delegate treemapView:self touchesEnded:touches withEvent:event];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(treemapView:touchesEnded:withEvent:)]) {
+        [self.delegate treemapView:self touchesEnded:touches withEvent:event];
     }
 }
 
 - (void)treemapViewCell:(TreemapViewCell *)treemapViewCell
            touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (delegate && [delegate respondsToSelector:@selector(treemapView:touchesMoved:withEvent:)]) {
-        [delegate treemapView:self touchesMoved:touches withEvent:event];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(treemapView:touchesMoved:withEvent:)]) {
+        [self.delegate treemapView:self touchesMoved:touches withEvent:event];
     }
 }
 
 - (void)treemapViewCell:(TreemapViewCell *)treemapViewCell tapped:(NSInteger)index {
-    if (delegate && [delegate respondsToSelector:@selector(treemapView:tapped:)]) {
-        [delegate treemapView:self tapped:index];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(treemapView:tapped:)]) {
+        [self.delegate treemapView:self tapped:index];
     }
 }
 
@@ -195,26 +192,26 @@
 #pragma mark UIView
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (delegate && [delegate respondsToSelector:@selector(treemapView:touchesBegan:withEvent:)]) {
-        [delegate treemapView:self touchesBegan:touches withEvent:event];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(treemapView:touchesBegan:withEvent:)]) {
+        [self.delegate treemapView:self touchesBegan:touches withEvent:event];
     }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (delegate && [delegate respondsToSelector:@selector(treemapView:touchesCancelled:withEvent:)]) {
-        [delegate treemapView:self touchesCancelled:touches withEvent:event];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(treemapView:touchesCancelled:withEvent:)]) {
+        [self.delegate treemapView:self touchesCancelled:touches withEvent:event];
     }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (delegate && [delegate respondsToSelector:@selector(treemapView:touchesEnded:withEvent:)]) {
-        [delegate treemapView:self touchesEnded:touches withEvent:event];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(treemapView:touchesEnded:withEvent:)]) {
+        [self.delegate treemapView:self touchesEnded:touches withEvent:event];
     }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    if (delegate && [delegate respondsToSelector:@selector(treemapView:touchesMoved:withEvent:)]) {
-        [delegate treemapView:self touchesMoved:touches withEvent:event];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(treemapView:touchesMoved:withEvent:)]) {
+        [self.delegate treemapView:self touchesMoved:touches withEvent:event];
     }
 }
 
@@ -235,13 +232,6 @@
         [self createNodes];
         initialized = YES;
     }
-}
-
-- (void)dealloc {
-    [dataSource release];
-    [delegate release];
-
-    [super dealloc];
 }
 
 @end
